@@ -14,16 +14,16 @@ const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-2">
+    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2 sm:px-8">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+        <p className="text-[14px] font-semibold  text-slate-400">
           Overview
         </p>
-        <h1 className="text-2xl font-semibold tracking-[-0.03em] text-slate-950">
+        <h1 className="text-[22px] font-semibold  text-slate-950">
           Dashboard
         </h1>
       </div>
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-2 sm:gap-5">
         <button
           type="button"
           aria-label="Notifications"

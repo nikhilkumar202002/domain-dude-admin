@@ -10,9 +10,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="h-screen overflow-hidden bg-slate-50">
       <Sidebar />
-      <div className="ml-68 flex h-screen min-w-0 flex-col">
+      <div className="flex h-screen min-w-0 flex-col lg:ml-68">
         <Header />
-        <main className="min-h-0 flex-1 overflow-y-auto p-8">{children}</main>
+        <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-8">{children}</main>
       </div>
     </div>
   );
