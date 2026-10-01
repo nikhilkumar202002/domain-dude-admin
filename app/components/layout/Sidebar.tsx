@@ -93,16 +93,22 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </Link>
           );
         })}
-      </nav>
-      <div className="mt-auto border-t border-slate-100 pt-5">
         <Link
           href="/settings"
-          className="group flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-950"
+          onClick={onClose}
+          className={`group flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors ${pathname.startsWith("/settings") ? "bg-indigo-50 text-indigo-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-950"}`}
         >
-          <FiSettings className="h-5 w-5 text-slate-400 group-hover:text-slate-700" />
+          <FiSettings
+            className={`h-5 w-5 ${pathname.startsWith("/settings") ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-700"}`}
+          />
           Settings
+          {pathname.startsWith("/settings") && (
+            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600" />
+          )}
         </Link>
-        <div className="mt-6 flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
+      </nav>
+      <div className="mt-auto pt-5">
+        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">
             JD
           </div>
