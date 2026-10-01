@@ -8,6 +8,7 @@ import {
   FiSearch,
   FiTrash2,
 } from "react-icons/fi";
+import ClientForm from "../forms/ClientForm";
 
 type Client = {
   id: number;
@@ -59,6 +60,7 @@ const clients: Client[] = [
 
 const ClientTable = () => {
   const [query, setQuery] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const filteredClients = useMemo(
     () =>
       clients.filter((client) =>
@@ -81,12 +83,21 @@ const ClientTable = () => {
         </div>
         <button
           type="button"
+          onClick={() => setIsFormOpen(true)}
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700"
         >
           <FiPlus className="h-4 w-4" />
           Add client
         </button>
       </div>
+      {isFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Create client">
+          <button type="button" aria-label="Close client form" onClick={() => setIsFormOpen(false)} className="fixed inset-0 cursor-default" />
+          <div className="relative z-10 my-4 w-full max-w-4xl sm:my-8">
+            <ClientForm onClose={() => setIsFormOpen(false)} />
+          </div>
+        </div>
+      )}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="flex flex-col justify-between gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center">
           <div>

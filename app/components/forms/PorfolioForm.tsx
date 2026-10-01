@@ -34,7 +34,7 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
   const [status, setStatus] = useState("Draft");
 
   return (
-    <section className="mx-auto w-full max-w-6xl">
+    <section className="mx-auto w-full max-w-7xl">
       <form
         className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
         onSubmit={(event) => event.preventDefault()}

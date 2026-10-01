@@ -103,7 +103,7 @@ const PortfolioTable = () => {
             onClick={() => setIsFormOpen(false)}
             className="fixed inset-0 cursor-default"
           />
-          <div className="relative z-10 my-4 w-full max-w-6xl sm:my-8">
+          <div className="relative z-10 my-4 w-full max-w-7xl sm:my-8">
             <PorfolioForm onClose={() => setIsFormOpen(false)} />
           </div>
         </div>
