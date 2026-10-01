@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FiArrowRight, FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 
 const LoginForm = () => {
@@ -12,12 +13,14 @@ const LoginForm = () => {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Domain Dude home">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-lg font-bold text-white shadow-lg shadow-indigo-200">
-              D
-            </span>
-            <span className="text-xl font-bold tracking-tight text-slate-950">
-              DOMAIN DUDE
-            </span>
+            <Image
+              src="/Domine-Dude_black.png"
+              alt="Domain Dude"
+              width={190}
+              height={61}
+              priority
+              className="h-auto w-48"
+            />
           </Link>
         </div>
 
