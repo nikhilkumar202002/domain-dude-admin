@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiBriefcase, FiUploadCloud } from "react-icons/fi";
+import { getClients } from "../../utils/client";
+import { getCategories } from "../../utils/Category";
 
-type PortfolioFormProps = { onClose?: () => void };
+type PortfolioFormProps = {
+  onClose?: () => void;
+  onSuccess?: () => void;
+  portfolioToEdit?: any;
+};
 
 const inputClass =
   "w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100";
@@ -30,8 +36,46 @@ const ImageUpload = ({
   </label>
 );
 
-const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
-  const [status, setStatus] = useState("Draft");
+const PorfolioForm = ({ onClose, portfolioToEdit }: PortfolioFormProps) => {
+  const [status, setStatus] = useState(portfolioToEdit?.status || "Draft");
+  const [selectedClient, setSelectedClient] = useState(portfolioToEdit?.client_id || "");
+  const [selectedCategory, setSelectedCategory] = useState(portfolioToEdit?.category_id || "");
+
+  const [clients, setClients] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [loadingOptions, setLoadingOptions] = useState(true);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      setLoadingOptions(true);
+      try {
+        const [clientsRes, categoriesRes] = await Promise.all([
+          getClients(),
+          getCategories(),
+        ]);
+
+        const clientList = clientsRes?.data
+          ? clientsRes.data
+          : Array.isArray(clientsRes)
+          ? clientsRes
+          : [];
+        const categoryList = categoriesRes?.data
+          ? categoriesRes.data
+          : Array.isArray(categoriesRes)
+          ? categoriesRes
+          : [];
+
+        setClients(clientList);
+        setCategories(categoryList);
+      } catch (err) {
+        console.error("Failed to load options", err);
+      } finally {
+        setLoadingOptions(false);
+      }
+    };
+
+    fetchOptions();
+  }, []);
 
   return (
     <section className="mx-auto w-full max-w-7xl">
@@ -41,7 +85,7 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
       >
         <div className="border-b border-slate-100 px-6 py-5">
           <h3 className="font-semibold text-slate-900">
-            Portfolio project details
+            {portfolioToEdit ? "Edit portfolio project" : "Portfolio project details"}
           </h3>
           <p className="mt-1 text-sm text-slate-400">
             Add the project information and visuals for your portfolio.
@@ -56,10 +100,12 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
               <input
                 required
                 name="title"
+                defaultValue={portfolioToEdit?.title || ""}
                 placeholder="e.g. Nexa Finance"
                 className={inputClass}
               />
             </label>
+
             <label className="space-y-2 sm:col-span-2">
               <span className="text-sm font-semibold text-slate-700">
                 Short description <span className="text-rose-500">*</span>
@@ -68,39 +114,55 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
                 required
                 name="description"
                 rows={3}
+                defaultValue={portfolioToEdit?.description || ""}
                 placeholder="Briefly describe this project..."
                 className={`${inputClass} resize-none`}
               />
             </label>
+
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-700">
-                Client name
+                Client
               </span>
-              <input
-                name="client"
-                placeholder="e.g. Acme Inc."
-                className={inputClass}
-              />
+              <select
+                name="client_id"
+                value={selectedClient}
+                onChange={(e) => setSelectedClient(e.target.value)}
+                className={`${inputClass} bg-white`}
+              >
+                <option value="">
+                  {loadingOptions ? "Loading clients..." : "-- Select a Client --"}
+                </option>
+                {clients.map((client) => (
+                  <option key={client.id} value={client.id}>
+                    {client.name}
+                  </option>
+                ))}
+              </select>
             </label>
+
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-700">
                 Category <span className="text-rose-500">*</span>
               </span>
               <select
                 required
-                name="category"
-                defaultValue=""
+                name="category_id"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
                 className={`${inputClass} bg-white`}
               >
-                <option value="" disabled>
-                  Select a category
+                <option value="">
+                  {loadingOptions ? "Loading categories..." : "-- Select a Category --"}
                 </option>
-                <option>Web Design</option>
-                <option>Branding</option>
-                <option>Mobile Apps</option>
-                <option>Marketing</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </label>
+
             <label className="space-y-2">
               <span className="text-sm font-semibold text-slate-700">
                 Project URL
@@ -108,11 +170,28 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
               <input
                 type="url"
                 name="url"
+                defaultValue={portfolioToEdit?.url || ""}
                 placeholder="https://example.com"
                 className={inputClass}
               />
             </label>
+
             <label className="space-y-2">
+              <span className="text-sm font-semibold text-slate-700">
+                Project Year
+              </span>
+              <input
+                type="number"
+                name="year"
+                defaultValue={portfolioToEdit?.year || new Date().getFullYear()}
+                placeholder="e.g. 2026"
+                min="1990"
+                max="2100"
+                className={inputClass}
+              />
+            </label>
+
+            <label className="space-y-2 sm:col-span-2">
               <span className="text-sm font-semibold text-slate-700">
                 Status
               </span>
@@ -122,10 +201,11 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
                 onChange={(event) => setStatus(event.target.value)}
                 className={`${inputClass} bg-white`}
               >
-                <option>Draft</option>
-                <option>Published</option>
+                <option value="Draft">Draft</option>
+                <option value="Published">Published</option>
               </select>
             </label>
+
             <label className="space-y-2 sm:col-span-2">
               <span className="text-sm font-semibold text-slate-700">
                 Project details
@@ -133,6 +213,7 @@ const PorfolioForm = ({ onClose }: PortfolioFormProps) => {
               <textarea
                 name="content"
                 rows={5}
+                defaultValue={portfolioToEdit?.content || ""}
                 placeholder="Describe the challenge, solution, and outcome..."
                 className={`${inputClass} resize-none`}
               />
