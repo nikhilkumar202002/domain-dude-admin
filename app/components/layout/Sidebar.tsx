@@ -8,6 +8,7 @@ import {
   FiFolder,
   FiGrid,
   FiLayers,
+  FiUsers,
   FiX,
   FiSettings,
 } from "react-icons/fi";
@@ -27,6 +28,7 @@ const navigation: {
   { label: "Dashboard", href: "/", icon: FiGrid },
   { label: "Category", href: "/category", icon: FiFolder },
   { label: "Portfolio", href: "/portfolio", icon: FiBriefcase },
+  { label: "Clients", href: "/client", icon: FiUsers },
   { label: "Service", href: "/service", icon: FiLayers },
 ];
 
