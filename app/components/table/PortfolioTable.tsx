@@ -92,7 +92,7 @@ const PortfolioTable = () => {
       </div>
       {isFormOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 p-4 sm:p-8"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 sm:p-8"
           role="dialog"
           aria-modal="true"
           aria-label="Create portfolio project"
@@ -103,7 +103,7 @@ const PortfolioTable = () => {
             onClick={() => setIsFormOpen(false)}
             className="fixed inset-0 cursor-default"
           />
-          <div className="relative z-10 w-full max-w-4xl">
+          <div className="relative z-10 my-4 w-full max-w-6xl sm:my-8">
             <PorfolioForm onClose={() => setIsFormOpen(false)} />
           </div>
         </div>
